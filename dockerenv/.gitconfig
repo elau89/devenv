@@ -1,0 +1,37 @@
+[core]
+    editor = vim -X --noplugin
+
+[alias]
+    ba = branch -avv
+    bu = branch -u
+    cb = checkout -b
+    ci = commit
+    co = checkout
+    dc = diff --cached --color -w
+    di = diff --color -w
+    dt = difftool -w
+    gs = rev-parse --short HEAD
+    ll = log --decorate --color --all --graph --pretty
+    ri = rebase -i
+    sl = log --decorate --color --all --graph --pretty=format:\"%C(red)%h \
+         %C(white)%s %C(yellow)%d %C(green)%ad %C(blue)<%an>%C(reset)\
+         \" --date=short
+    st = status
+    su = submodule update --init --recursive
+
+    sfa = submodule foreach git fetch
+    sca = submodule foreach git checkout
+    spa = submodule foreach git pull
+
+    sta = subtree add --squash
+    stp = subtree pull --squash
+    sts = subtree split --squash
+
+[merge]
+    tool = vimdiff
+
+[color]
+    status = auto
+    branch = auto
+    interactive = auto
+    diff = auto
