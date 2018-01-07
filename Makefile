@@ -17,8 +17,7 @@ DOCKERRM_IMAGES = $(shell docker images -a --format="{{.ID}}")
 all: run
 
 build:
-	${DOCKERBIN} build -t ${DOCKERREPO}:${DOCKERTAG} -f ${DOCKERFILE} \
-		${DOCKERPATH} &> devenv_build.out
+	${DOCKERBIN} build -t ${DOCKERREPO}:${DOCKERTAG} -f ${DOCKERFILE} ${DOCKERPATH}
 
 run: build
 	mkdir -p ${DOCKERHOME}
@@ -26,4 +25,6 @@ run: build
 
 clean:
 	${DOCKERBIN} rm ${DOCKERRM_CONTAINERS} > /dev/null 2>&1 || true
+
+purge: clean
 	${DOCKERBIN} rmi ${DOCKERRM_IMAGES} > /dev/null 2>&1 || true
