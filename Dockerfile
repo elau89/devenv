@@ -33,15 +33,21 @@ USER ${DOCKERUSER}
 WORKDIR ${DOCKERHOME}
 
 RUN pip install --user pygments && \
+    echo "Installing and updating vim plugins..." &&\
     mkdir -p ${HOME}/.vim/bundle && \
     ./dein_installer.sh ${HOME}/.vim/bundle && \
     TERM=dumb ./oh-my-zsh_installer.sh && \
     cp -fr custom .oh-my-zsh/ && \
-    echo "Installing and updating vim plugins..." &&\
     vim --not-a-term -c ":q!" &> /dev/null || true && \
-    echo "Vim plugins updated.  Cleaning the installers..." && \
-    rm -fr dein_installer.sh oh-my-zsh_installer.sh custom
+    echo "Vim plugins installed and updated." && \
+    echo "Running custom installer.sh" && \
+    ./installer.sh && \ 
+    echo "Cleaning installers..." && \
+    rm -fr dein_installer.sh \
+        oh-my-zsh_installer.sh \
+        custom \
+        installer.sh \
+        gituser.txt
 
 # Start development environment
 CMD ["/bin/tmux","-2u"]
-#CMD ["/bin/zsh"]
