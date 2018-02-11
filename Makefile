@@ -1,14 +1,23 @@
+# Docker commands
 DOCKERBIN ?= docker
 DOCKERCMD ?=
+
+# Build-time variables
 DOCKERFILE ?= Dockerfile
 DOCKERPATH ?= .
-DOCKERREPO ?= dev
+DOCKERREPO ?= devenv
 DOCKERTAG ?= latest
 
 DOCKERUSER ?= dockeruser
 DOCKERMNT ?= /home/${DOCKERUSER}/shared
 DOCKERHOME ?= ${HOME}/.dockervol
 DOCKERVOL ?= ${DOCKERHOME}:${DOCKERMNT}:Z
+DOCKERBUILDARGS ?=
+DOCKERBUILDFLAGS ?= ${DOCKERBUILDARGS} \
+					-t ${DOCKERREPO}:${DOCKERTAG} \
+					-f ${DOCKERFILE}
+
+# Run-time variables
 DOCKERFLAGS ?= --rm -it -v ${DOCKERVOL}
 
 DOCKERRM_CONTAINERS = $(shell docker ps -a --format="{{.ID}}")
@@ -17,7 +26,7 @@ DOCKERRM_IMAGES = $(shell docker images -a --format="{{.ID}}")
 all: run
 
 build:
-	${DOCKERBIN} build -t ${DOCKERREPO}:${DOCKERTAG} -f ${DOCKERFILE} ${DOCKERPATH}
+	${DOCKERBIN} build ${DOCKERBUILDFLAGS} ${DOCKERPATH}
 
 run: build
 	mkdir -p ${DOCKERHOME}
