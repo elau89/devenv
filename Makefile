@@ -28,8 +28,10 @@ all: run
 build:
 	${DOCKERBIN} build ${DOCKERBUILDFLAGS} ${DOCKERPATH}
 
+# For security purposes, ${DOCKERHOME} should only have owner-write permissions
 run: build
 	mkdir -p ${DOCKERHOME}
+	chmod 700 ${DOCKERHOME}
 	${DOCKERBIN} run ${DOCKERFLAGS} ${DOCKERREPO}:${DOCKERTAG} ${DOCKERCMD}
 
 clean:
