@@ -23,31 +23,13 @@ RUN ln -sf /usr/share/zoneinfo/US/Eastern /etc/localtime && \
 
 # Prepare user account
 ARG DOCKERUSER=dockeruser
-ARG DOCKERHOME=/home/${DOCKERUSER}
+ENV DOCKERHOME=/home/${DOCKERUSER}
 
-RUN useradd -ms /bin/zsh ${DOCKERUSER}
-COPY dockerenv ${DOCKERHOME}
-RUN chown -R ${DOCKERUSER} ${DOCKERHOME}
+RUN useradd -Ms /bin/zsh ${DOCKERUSER}
 
 USER ${DOCKERUSER}
 WORKDIR ${DOCKERHOME}
 
-RUN pip install --user pygments && \
-    echo "Installing and updating vim plugins..." &&\
-    mkdir -p ${HOME}/.vim/bundle && \
-    ./dein_installer.sh ${HOME}/.vim/bundle && \
-    TERM=dumb ./oh-my-zsh_installer.sh && \
-    cp -fr custom .oh-my-zsh/ && \
-    vim --not-a-term -c ":q!" &> /dev/null || true && \
-    echo "Vim plugins installed and updated." && \
-    echo "Running custom installer.sh" && \
-    ./installer.sh && \ 
-    echo "Cleaning installers..." && \
-    rm -fr dein_installer.sh \
-        oh-my-zsh_installer.sh \
-        custom \
-        installer.sh \
-        gituser.txt
-
 # Start development environment
-CMD ["/bin/tmux","-2u"]
+ENTRYPOINT ["/bin/bash", "-c"]
+CMD ["${DOCKERHOME}/installer.sh && tmux -2u"]
