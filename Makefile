@@ -52,3 +52,5 @@ clean:
 
 purge: clean
 	${DOCKERBIN} rmi ${DOCKERRM_IMAGES} > /dev/null 2>&1 || true
+
+.PHONY: all build install run clean purge
